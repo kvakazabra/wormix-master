@@ -1,0 +1,9 @@
+[submodule "wormix-api"]
+	path = wormix-api
+	url = https://github.com/kvakazabra/wormix-api
+[submodule "wormix-core"]
+	path = wormix-core
+	url = https://github.com/kvakazabra/wormix-core
+[submodule "wormix-web"]
+	path = wormix-web
+	url = https://github.com/kvakazabra/wormix-web
