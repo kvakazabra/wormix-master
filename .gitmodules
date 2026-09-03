@@ -7,3 +7,4 @@
 [submodule "wormix-web"]
 	path = wormix-web
 	url = https://github.com/kvakazabra/wormix-web
+	branch = master-docker
