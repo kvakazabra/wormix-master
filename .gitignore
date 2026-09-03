@@ -1,2 +1,4 @@
 wormix-app/**
 !wormix-app/.keep
+!**Dockerfile
+!**README.md
