@@ -70,13 +70,11 @@ services:
   web-dev:
     build:
       context: ./wormix-web
-      target: dev
     ports:
       - "8080:8080"
     volumes:
       - ./wormix-web:/app
       - /app/node_modules
-    profiles: ["dev"]
     networks:
       - wormix
 
