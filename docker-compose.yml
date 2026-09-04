@@ -1,0 +1,89 @@
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wormix
+
+  api:
+    build: ./wormix-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - api-storage:/app/storage
+    ports:
+      - "8000:8000"
+    networks:
+      - wormix
+
+  core:
+    build: ./wormix-core
+    volumes:
+      - ./wormix-core:/host-root:ro
+    ports:
+      - "843:843"
+      - "49197:49197"
+      - "49298:49298"
+      - "49299:49299"
+      - "49300:49300"
+    networks:
+      - wormix
+  
+  app:
+    build: ./wormix-app
+    ports:
+      - "3137:3137"
+    volumes:
+      - ./wormix-app:/app
+    networks:
+      - wormix
+  
+#  web:
+#    build:
+#      context: ./wormix-web
+#      target: prod
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - wormix
+
+  web-dev:
+    build:
+      context: ./wormix-web
+      target: dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./wormix-web:/app
+      - /app/node_modules
+    profiles: ["dev"]
+    networks:
+      - wormix
+
+networks:
+  wormix:
+    driver: bridge
+
+volumes:
+  dbdata:
+  api-storage:
