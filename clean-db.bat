@@ -1,0 +1,13 @@
+@echo off
+echo Stopping and removing api and db containers...
+docker compose rm -sf api db
+
+echo Removing database and storage volumes...
+docker volume rm wormix-master_dbdata
+docker volume rm wormix-master_api-storage
+
+echo Starting db and waiting for it to be healthy...
+docker compose up -d db
+
+echo Starting api (will run fresh migrate + game:init)...
+docker compose up api
