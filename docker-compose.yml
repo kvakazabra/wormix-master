@@ -31,6 +31,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./wormix-api:/app # dev
+      - api-vendor:/app/vendor # keep vendor out of the slow Windows bind mount
       - api-storage:/app/storage
     ports:
       - "8000:8000"
@@ -86,3 +87,4 @@ networks:
 volumes:
   dbdata:
   api-storage:
+  api-vendor:
